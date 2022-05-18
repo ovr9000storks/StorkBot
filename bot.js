@@ -24,6 +24,7 @@ const client = new Discord.Client({intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_B
 //declare application events
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
+  client.user.setActivity('Goofy Goober Rock', {type:'LISTENING'});
 })
 
 
