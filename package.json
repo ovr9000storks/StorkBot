@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Andrew Lauricella",
   "license": "ISC",
-  "description": ""
+  "description": "StorkBot is a Discord bot that gives moderation, utility, and fun operations to a discord server"
 }
