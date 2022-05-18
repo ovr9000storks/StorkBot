@@ -142,7 +142,7 @@ function handleMessage(msg, operator){
 
     //check for the help CMD
     if(CMD === "help"){
-        msg.reply("You can find notation for all commands here:\n<INSERT LINK>");
+        msg.reply("You can find notation for all commands here:\nhttps://bit.ly/StorkBot");
         return;
     }
     
