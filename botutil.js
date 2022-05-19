@@ -1,12 +1,17 @@
 /**
+ * Copyright (C) 2022, Andrew Lauricella
+ * This bot is not to be altered or used in any way without the author's permission
+ * @author  Andrew Lauricella
  * @version 1
+ * 
+ * 
+ * @summary Contains some utility operations for the bot to handle various events
+ * 
  */
 
 const FUN = require("./fun.js");
 const MODERATE = require("./moderate.js");
 const UTILITY = require("./utility.js");
-
-var MAX_TOKENS = 20;
 
 function handleMessage(msg, operator){
     //TODO: increment user message count
@@ -15,12 +20,8 @@ function handleMessage(msg, operator){
 
     var RAW_TOKENS = msg.content.split(" ");     //raw input, tokenized by spaces
     var CMD_TOKENS = [];                         //filtered tokens
-    
-    //if there are less tokens in the message than MAX_TOKENS, reduce MAX_TOKENS
-    if(RAW_TOKENS.length < MAX_TOKENS)
-        MAX_TOKENS = RAW_TOKENS.length;
 
-    for(let i = 0; i < MAX_TOKENS; i++){        //filter out blank tokens
+    for(let i = 0; i < RAW_TOKENS.length; i++){        //filter out blank tokens
         var tok = RAW_TOKENS[i].trim();
         if(tok.length > 0){
             CMD_TOKENS.push(tok);

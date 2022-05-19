@@ -34,7 +34,7 @@ client.on("messageCreate", msg => {
     //Format:   "<SERVER_CMD_OPERATOR><COMMAND> <CMD_CONTENT>"
     //          "~userinfo @ovr9000storks#0001"
 
-    if(msg.author === client.user)
+    if(msg.author === client.user || msg.content.trim().charAt(0) != SERVER_CMD_OPERATOR)
         return;
     
     //jQuery.getscript("./botutil.js", function(){ handleMessage(msg); });
