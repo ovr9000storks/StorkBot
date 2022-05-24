@@ -84,6 +84,9 @@ function handleMessage(msg, operator){
         case "localtime":
             cmdFound = true;
             let location = "";
+            if(CMD_TOKENS.length == 1){
+                msg.reply("You did not enter where you want the local time for...\n" + HELP_INFO);
+            }
             for(let i = 1; i < CMD_TOKENS.length; i++)
                 location += CMD_TOKENS[i] + " ";
             UTILITY.getTime(msg, location.trim());
