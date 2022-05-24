@@ -81,8 +81,12 @@ function handleMessage(msg, operator){
         case "profile":
             cmdFound = true;
             break;
-        case "timezone":
+        case "localtime":
             cmdFound = true;
+            let location = "";
+            for(let i = 1; i < CMD_TOKENS.length; i++)
+                location += CMD_TOKENS[i] + " ";
+            UTILITY.getTime(msg, location.trim());
             break;
         case "googleimage":
             cmdFound = true;
