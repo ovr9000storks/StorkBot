@@ -10,14 +10,85 @@
  */
 
 //call all require statements
+require('dotenv').config();
+
+
+const reportText = "Please send this bug to my developer using the \"report\" command <3";
 
 /**
  * 
  * @param {*} msg Discord Message Object
+ * @param {*} location an object that either contains coordinates or the name of a city or country
  * @summary Replies to the msg author with the time in the specified time zone
  */
-function getTime(msg){
-    //TODO: find a time zone service and reply to the user with the correct time
+function getTime(msg, location){
+    const bing_key = process.env.BING_MAP_KEY;
+    const axios = require('axios').default;
+
+    //build the API call
+    let url = ("https://dev.virtualearth.net/REST/v1/TimeZone/query=" + location + "?key=" + process.env.BING_MAP_KEY).replaceAll(" ", "%");
+
+    //send the API call
+    axios
+        .get(url)
+        .then(response=>{
+            //no data on the location, will default to an error catch
+            if(response.data.resourceSets[0].resources[0].timeZoneAtLocation.length == 0){
+                msg.reply("It appears I have no data on that location...\nCheck for any typos or maybe try another location in the same time zone");
+                return;
+            }
+            
+            //get the necessary JSON data 
+            let selectedZones = response.data.resourceSets[0].resources[0].timeZoneAtLocation[0].timeZone;
+            let newLocation = response.data.resourceSets[0].resources[0].timeZoneAtLocation[0].placeName;
+
+            //if the selected area has more than one time zone, skip
+            //TODO: allow multiple time zones and sort west to east
+            if(selectedZones.length > 1){
+                msg.reply("This location has many timezones, please be more specific");
+                return;
+            }
+
+            const zone = selectedZones[0];  //time zone information
+            let textReply = "The current time in " + newLocation + " is ... ";  //text to reply to the user with
+            let localTime = zone.convertedTime.localTime.split("T")[1].split(":");  //array of hours, minutes and seconds
+            let hour = parseInt(localTime[0]);  //convert string to number
+            let minute = parseInt(localTime[1]);    //convert string to number
+            let ampm = "A.M.";  //am/pm text
+
+            //convert 24 hour to 12 hour time
+            if(hour > 11){  //PM
+                ampm = "P.M.";
+                if(hour > 12)
+                    hour -= 12;
+            }else if(hour == 0){    //AM
+                hour = 12;
+            }
+
+            //add the time to the reply string
+            textReply += hour + ":" + minute + " " + ampm;
+            msg.reply(textReply);
+
+        })
+        .catch(error=>{
+            msg.reply("It appears an internal error occurred...\n" + reportText);
+        })
+}
+
+//utility function for getTime(msg, location) to normalize for dalyight savings time
+function getNormalizedUtcOffset(timezone){
+    
+    var momentZones = require("moment-timezone");
+    //get the offset for the city or state
+    const momentTimezone = momentZones.tz(timezone);
+    if(!momentTimezone)
+        return null;
+    
+    let offset = momentTimezone.utcOffset();
+    if(momentTimezone.isDST())      //correct for daylight savings time
+        offset-=60;
+
+    return offset/60;
 }
 
 /**
@@ -137,3 +208,6 @@ function reportUser(msg){
 function setUserReportReceiveChannel(msg){
     //TODO: determine if user is admin, then set the server config's report channel 
 }
+
+
+module.exports = {getTime};
