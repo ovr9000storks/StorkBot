@@ -53,7 +53,7 @@ function getTime(msg, location){
             let textReply = "The current time in " + newLocation + " is ... ";  //text to reply to the user with
             let localTime = zone.convertedTime.localTime.split("T")[1].split(":");  //array of hours, minutes and seconds
             let hour = parseInt(localTime[0]);  //convert string to number
-            let minute = parseInt(localTime[1]);    //convert string to number
+            let minute = localTime[1];    //convert string to number
             let ampm = "A.M.";  //am/pm text
 
             //convert 24 hour to 12 hour time
