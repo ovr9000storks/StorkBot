@@ -15,6 +15,10 @@ const CONFIG = require("./config.json");
 //text to reply with when an error or bug occurs
 const reportText = "Please send this bug to my developer using the \"report\" command <3";
 
+//declare any helpful sstructures
+var coinSides = ["tails", "heads"];
+var rpsOptions = ["rock", "paper", "scissor"];
+
 /**
  * 
  * @param {*} msg Discord Message Object
@@ -23,6 +27,7 @@ const reportText = "Please send this bug to my developer using the \"report\" co
  */
 function retrieveUserBalance(msg, user){
     //TODO: implement when users.json is operational
+    msg.reply("Balances are not yet implemented, so you either have 0 or infinite money depending on how you think about it!");
 }
 
 /**
@@ -33,17 +38,47 @@ function retrieveUserBalance(msg, user){
  */
  function retrieveLeaderboard(msg, boardScope){
     //TODO: implement when users.json is operational
+    msg.reply("Balances are not yet implemented, so everyone is equal at the moment");
 }
 
 /**
  * 
  * @param {*} msg Discord Message Object
- * @param {*} numDie number of dice to roll
- * @param {*} numSides number of sides the dice has
+ * @param {number} numDie number of dice to roll
+ * @param {number} numSides number of sides the dice has
  * @summary rolls <numDie> die, each with <numSides> sides and returns the values to the user
  */
  function diceRoll(msg, numDie, numSides){
     //TODO: for loop that generates values from a range of [2,<numSides>] <numDie> times
+
+    //ensure the numbers given are positive
+    if(numDie < 1 || numSides < 1){
+        msg.reply("Invalid number... try something positive!");
+        return;
+    }
+    //generate the numbers
+    let response = "";
+    for(let i = 0; i < numDie; i++){
+        response += (1 + Math.floor(Math.random() * numSides)) + " ";
+    }
+    
+    msg.reply("Your numbers are...\n" + response);
+}
+
+/**
+ * 
+ * @param {*} msg Discord Message Object
+ * @param {string} selectedSide Either heads/head/h or tails/tail/t
+ * @summary Flips a coin (random 0-2, heads is >1), and compares it with the user's guess and awards the user if correct
+ */
+ function coinFlip(msg, selectedSide){
+    let randomNum = Math.random() * 2;
+    if(randomNum < 1){
+            msg.reply("The coin shows **TAILS**");
+    }else{
+            msg.reply("The coin shows **HEADS**");
+    }
+    
 }
 
 /**
@@ -53,9 +88,40 @@ function retrieveUserBalance(msg, user){
  * @param {*} betAmount an integer of the number of points the user bet
  * @summary Flips a coin (random 0-2, heads is >1), and compares it with the user's guess and awards the user if correct
  */
- function coinFlip(msg, selectedSide, betAmount){
-    //TODO: random num must be 0-2 (0-1 for tails, >1 is heads), and award the user 2x their bet amount.
-    //      bet amount and point awards will be fully implemented when users.json is fully operational
+ function coinFlipBet(msg, selectedSide, betAmount){
+    //TODO: bet amount and point awards will be fully implemented when users.json is fully operational
+
+    //decode the 
+    let decodedSide = "-";
+    if(selectedSide == "h" || selectedSide == "head" || selectedSide == "heads"){
+        decodedSide = "heads";
+    }else if(selectedSide == "t" || selectedSide == "tail" || selectedSide == "tails"){
+        decodedSide = "heads";
+    }else{
+        msg.reply("Thats not a side of a coin! Try something like 'heads, 'tail', or 'h'");
+        return;
+    }
+
+    //let winnings = -betAmount;
+
+    //generate the random number representing the side of the coin flipped
+    //0 is tails, 1 is heads
+    let randomNum = Math.floor((Math.random()) * 2);
+
+    try{
+        if(coinSides[randomNum] == decodedSide){
+            msg.reply("The coin shows ... **" + coinSides[randomNum].toUpperCase() + "**! You win, congratuilations!");
+            //winnings += betAmount*2;
+        }else{
+            msg.reply("The coin shows ... **" + coinSides[randomNum].toUpperCase() + "**... You lose :/");
+        }
+
+        //update the player's total points
+        //playerPoints += winnings;
+    }catch{
+        msg.reply("Something went wrong on our end... to compensate, you were granted a **win**!");
+    }
+    
 }
 
 /**
@@ -95,13 +161,45 @@ function retrieveUserBalance(msg, user){
 /**
  * 
  * @param {*} msg Discord Message Object
- * @param {*} playerDecision the option of either rock, paper, or scissors from the user
+ * @param {*} playerOption the option of either rock, paper, or scissors from the user
  * @param {*} betAmount integer number of points the user opts into betting, only used when the game is started
  * @summary Standard game of rock, paper, scissors. The user specifies their option and bet amount, and awarded points if the user beats the random bot selection
  */
- function rockPaperScissors(msg, playerDecision, betAmount){
+ function rockPaperScissors(msg, playerOption, betAmount){
     //TODO: randomly select rock, paper, or scissors, and award the user points if they win
     //      <betAmount> and points awards will be fully implemented when users.json is fully operational
+    
+    let decodedOption = '-';
+    if(playerOption === "r" || playerOption === "rock" || playerOption === "rocks"){
+        decodedOption = "rock";
+    }else if(playerOption === "p" || playerOption === "paper" || playerOption === "papers"){
+        decodedOption = "paper";
+    }else if(playerOption === "s" || playerOption === "scissor" || playerOption === "scissors"){
+        decodedOption = "scissor"
+    }else{
+        msg.reply("That's not an option in this game... try something like 'rock', 'papers', or 's'");
+        return;
+    }
+
+    //let winnings = -betAmount;
+
+    //generate the random number representing the side of the coin flipped
+    //0 is rock, 1 is paper, and 2 is scissor
+    let randomNum = Math.floor((Math.random()) * 3);
+
+
+    try{
+        if(rpsOptions[randomNum] == decodedOption){
+            msg.reply("I chose " + rpsOptions[randomNum] + "... **YOU WIN**, congratulations!");
+            //winnings += betAmount*3;
+        }else{
+            msg.reply("I chose " + rpsOptions[randomNum] + "... **YOU LOSE**, better luck next time");
+        }
+        //update the player's total points
+        //playerPoints += winnings;
+    }catch{
+        msg.reply("Something went wrong on our end... to compensate, you were granted a **win**!");
+    }
 }
 
 /**
@@ -125,6 +223,7 @@ function retrieveUserBalance(msg, user){
  */
  function guessTheNumber(msg, gameType, guess){
     //TODO: decide the ranges for the difficulties, then generate a random number in that range
+
 }
 
 /**
@@ -182,5 +281,5 @@ function retrieveUserBalance(msg, user){
 }
 
 
-module.exports = {retrieveUserBalance, retrieveLeaderboard, diceRoll, coinFlip, slotMachine, dealOrNoDeal, blackjack, rockPaperScissors, hangman, guessTheNumber, dadJoke, rule34, waifuGenerator, nftGenerator, magic8Ball, ouijaResponse};
+module.exports = {retrieveUserBalance, retrieveLeaderboard, diceRoll, coinFlip, coinFlipBet, slotMachine, dealOrNoDeal, blackjack, rockPaperScissors, hangman, guessTheNumber, dadJoke, rule34, waifuGenerator, nftGenerator, magic8Ball, ouijaResponse};
 
