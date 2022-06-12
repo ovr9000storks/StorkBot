@@ -28,7 +28,7 @@ client.on("ready", () => {
 })
 
 
-//import {handleMessage} from "./botuitil.js";
+//TODO investigate if thead creation is needed; create a max of 10 threads and a queue of threads to execute for each message
 client.on("messageCreate", msg => {
     var SERVER_CMD_OPERATOR = CONFIG.REQUIRED_OPERATOR;                         //TODO: change this to server's specific
     //Format:   "<SERVER_CMD_OPERATOR><COMMAND> <CMD_CONTENT>"
