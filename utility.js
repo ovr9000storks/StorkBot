@@ -51,7 +51,7 @@ function getTime(msg, location){
             }
 
             const zone = selectedZones[0];  //time zone information
-            let textReply = "The current time in " + newLocation + " is ... ";  //text to reply to the user with
+            let textReply = "The current time in " + newLocation + " (" + selectedZones[0].abbreviation + ") is ... ";  //text to reply to the user with
             let localTime = zone.convertedTime.localTime.split("T")[1].split(":");  //array of hours, minutes and seconds
             let hour = parseInt(localTime[0]);  //convert string to number
             let minute = localTime[1];    //convert string to number

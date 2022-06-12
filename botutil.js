@@ -95,10 +95,11 @@ function handleMessage(msg, operator){
             let location = "";
             if(CMD_TOKENS.length == 1){
                 msg.reply("You did not enter where you want the local time for...\n" + HELP_INFO);
+                return;
             }
             for(let i = 1; i < CMD_TOKENS.length; i++)
                 location += CMD_TOKENS[i] + " ";
-            UTILITY.getTime(msg, location.trim());
+            UTILITY.getTime(msg, location.trim().replaceAll(" ", ""));
             break;
         case "googleimage":
             cmdFound = true;
