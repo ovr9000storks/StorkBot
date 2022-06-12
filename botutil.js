@@ -81,17 +81,13 @@ function handleMessage(msg, operator){
             break;
         case "flip":
             cmdFound = true;
-            if(CMD_TOKENS.length == 1){
-                msg.reply("You did not submit a guess. Try again");
-                return;
-            }
 
-            if(CMD_TOKENS == 2){
-                FUN.coinFlip(msg, CMD_TOKENS[1]);
+            if(CMD_TOKENS.length == 1){
+                FUN.coinFlip(msg);
             }else{
                 try{
                     let bet = parseInt(CMD_TOKENS[2]);
-                    FUN.coinFlipBet(msg, CMD_TOKENS[1], bet);
+                    FUN.coinFlipBet(msg, CMD_TOKENS[1].toLowerCase(), bet);
                 }catch{
                     msg.reply("The bet amount was not valid. Try again");
                     return;
@@ -111,7 +107,7 @@ function handleMessage(msg, operator){
                 msg.reply("You did not submit a guess. Try again");
                 return;
             }
-            FUN.rockPaperScissors(msg, CMD_TOKENS[1], 0);
+            FUN.rockPaperScissors(msg, CMD_TOKENS[1].toLowerCase(), 0);
             break;
         case "hangman":
             cmdFound = true;
