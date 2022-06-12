@@ -168,38 +168,44 @@ function retrieveUserBalance(msg, user){
  function rockPaperScissors(msg, playerOption, betAmount){
     //TODO: randomly select rock, paper, or scissors, and award the user points if they win
     //      <betAmount> and points awards will be fully implemented when users.json is fully operational
-    
-    let decodedOption = '-';
-    if(playerOption === "r" || playerOption === "rock" || playerOption === "rocks"){
-        decodedOption = "rock";
-    }else if(playerOption === "p" || playerOption === "paper" || playerOption === "papers"){
-        decodedOption = "paper";
-    }else if(playerOption === "s" || playerOption === "scissor" || playerOption === "scissors"){
-        decodedOption = "scissor"
-    }else{
-        msg.reply("That's not an option in this game... try something like 'rock', 'papers', or 's'");
-        return;
-    }
 
     //let winnings = -betAmount;
 
     //generate the random number representing the side of the coin flipped
     //0 is rock, 1 is paper, and 2 is scissor
     let randomNum = Math.floor((Math.random()) * 3);
-
-
-    try{
-        if(rpsOptions[randomNum] == decodedOption){
-            msg.reply("I chose " + rpsOptions[randomNum] + "... **YOU WIN**, congratulations!");
-            //winnings += betAmount*3;
-        }else{
-            msg.reply("I chose " + rpsOptions[randomNum] + "... **YOU LOSE**, better luck next time");
-        }
-        //update the player's total points
-        //playerPoints += winnings;
-    }catch{
-        msg.reply("Something went wrong on our end... to compensate, you were granted a **win**!");
+    let playerWin = -1;     //-1 for loss, 0 for draw, 1 for win
+    if(playerOption === "r" || playerOption === "rock" || playerOption === "rocks"){
+        if(randomNum == 2)  //bot chooses scissor
+            playerWin = 1;
+        else if(randomNum == 0) //bot chooses rock
+            playerWin = 0;
+    }else if(playerOption === "p" || playerOption === "paper" || playerOption === "papers"){
+        if(randomNum == 0)  //bot chooses rock
+            playerWin = 1;
+        else if(randomNum == 1) //bot chooses paper
+            playerWin = 0;
+    }else if(playerOption === "s" || playerOption === "scissor" || playerOption === "scissors"){
+        if(randomNum == 1)  //bot chooses paper
+            playerWin = 1;
+        else if(randomNum == 2) //bot chooses scissor
+            playerWin = 0;
+    }else{
+        msg.reply("That's not an option in this game... try something like 'rock', 'papers', or 's'");
+        return;
     }
+
+    //adjust the player's awards 
+    //winnings *= plaerWin*2;
+
+    let replyText = "I chose " + rpsOptions[randomNum] + "... ";
+
+    if(playerWin == 0)
+        msg.reply(replyText + "Its a **DRAW**, points refunded");
+    else if(playerWin == 1)
+        msg.reply(replyText + "You **WIN**, congratulations!");
+    else
+        msg.reply(replyText + "You **LOSE**, unlucky :/");
 }
 
 /**
