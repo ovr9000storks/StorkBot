@@ -43,12 +43,61 @@ function handleMessage(msg, operator){
     switch(CMD){
         case "bal":
             cmdFound = true;
+            FUN.retrieveUserBalance(msg, 1);
+            break;
+        case "balance":
+            cmdFound = true;
+            FUN.retrieveUserBalance(msg, 1);
+            break;
+        case "lb":
+            cmdFound = true;
+            FUN.retrieveLeaderboard(msg, "global");
+            break;
+        case "leader": 
+            cmdFound = true;
+            FUN.retrieveLeaderboard(msg, "global");
+            break;
+        case "leaderboard":
+            cmdFound = true;
+            FUN.retrieveLeaderboard(msg, "global");
             break;
         case "roll":
             cmdFound = true;
+            let numDie = 1;
+            let numSides = 6;
+
+            if(CMD_TOKENS.length > 1){
+                try{ 
+                    numDie = parseInt(CMD_TOKENS[1]);
+                    if(CMD_TOKENS.length > 2)
+                        numSides = parseInt(CMD_TOKENS[2]);
+                }catch{
+                    msg.reply("Either the specified # of die or sides was not a number...");
+                    return;
+                }
+            }
+
+            FUN.diceRoll(msg, numDie, numSides);
             break;
         case "flip":
             cmdFound = true;
+            if(CMD_TOKENS.length == 1){
+                msg.reply("You did not submit a guess. Try again");
+                return;
+            }
+
+            if(CMD_TOKENS == 2){
+                FUN.coinFlip(msg, CMD_TOKENS[1]);
+            }else{
+                try{
+                    let bet = parseInt(CMD_TOKENS[2]);
+                    FUN.coinFlipBet(msg, CMD_TOKENS[1], bet);
+                }catch{
+                    msg.reply("The bet amount was not valid. Try again");
+                    return;
+                }
+                
+            }
             break;
         case "dealnodeal":
             cmdFound = true;
@@ -58,6 +107,11 @@ function handleMessage(msg, operator){
             break;
         case "rps":
             cmdFound = true;
+            if(CMD_TOKENS.length == 1){
+                msg.reply("You did not submit a guess. Try again");
+                return;
+            }
+            FUN.rockPaperScissors(msg, CMD_TOKENS[1], 0);
             break;
         case "hangman":
             cmdFound = true;
@@ -73,12 +127,15 @@ function handleMessage(msg, operator){
             break;
         case "dance":
             cmdFound = true;
+            msg.reply("https://i.imgur.com/Saem0uP.mp4");
             break;
         case "bathtime":
             cmdFound = true;
+            msg.reply("https://i.imgur.com/qK2EwhH.mp4");
             break;
         case "sadness":
             cmdFound = true;
+            msg.reply("https://c.tenor.com/UMEz2XNUFzYAAAAM/shoebill-bird.gif");
             break;
     }
 
