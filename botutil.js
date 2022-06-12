@@ -71,6 +71,15 @@ function handleMessage(msg, operator){
         case "r34":
             cmdFound = true;
             break;
+        case "dance":
+            cmdFound = true;
+            break;
+        case "bathtime":
+            cmdFound = true;
+            break;
+        case "sadness":
+            cmdFound = true;
+            break;
     }
 
     if(cmdFound)
