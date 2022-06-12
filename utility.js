@@ -10,7 +10,7 @@
  */
 
 //call all require statements
-require('dotenv').config();
+const CONFIG = require("./config.json");
 
 
 const reportText = "Please send this bug to my developer using the \"report\" command <3";
@@ -45,6 +45,7 @@ function getTime(msg, location){
             //if the selected area has more than one time zone, skip
             //TODO: allow multiple time zones and sort west to east
             if(selectedZones.length > 1){
+                //TODO: sort times from east to west
                 msg.reply("This location has many timezones, please be more specific");
                 return;
             }
