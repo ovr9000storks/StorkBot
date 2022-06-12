@@ -68,10 +68,9 @@ function retrieveUserBalance(msg, user){
 /**
  * 
  * @param {*} msg Discord Message Object
- * @param {string} selectedSide Either heads/head/h or tails/tail/t
  * @summary Flips a coin (random 0-2, heads is >1), and compares it with the user's guess and awards the user if correct
  */
- function coinFlip(msg, selectedSide){
+ function coinFlip(msg){
     let randomNum = Math.random() * 2;
     if(randomNum < 1){
             msg.reply("The coin shows **TAILS**");
@@ -84,19 +83,19 @@ function retrieveUserBalance(msg, user){
 /**
  * 
  * @param {*} msg Discord Message Object
- * @param {*} selectedSide Either heads/H or tails/T
- * @param {*} betAmount an integer of the number of points the user bet
+ * @param {string} selectedSide Either heads/H or tails/T
+ * @param {number} betAmount an integer of the number of points the user bet
  * @summary Flips a coin (random 0-2, heads is >1), and compares it with the user's guess and awards the user if correct
  */
  function coinFlipBet(msg, selectedSide, betAmount){
     //TODO: bet amount and point awards will be fully implemented when users.json is fully operational
-
-    //decode the 
+    
+    //decode the player's option 
     let decodedSide = "-";
     if(selectedSide == "h" || selectedSide == "head" || selectedSide == "heads"){
         decodedSide = "heads";
     }else if(selectedSide == "t" || selectedSide == "tail" || selectedSide == "tails"){
-        decodedSide = "heads";
+        decodedSide = "tails";
     }else{
         msg.reply("Thats not a side of a coin! Try something like 'heads, 'tail', or 'h'");
         return;
@@ -110,7 +109,7 @@ function retrieveUserBalance(msg, user){
 
     try{
         if(coinSides[randomNum] == decodedSide){
-            msg.reply("The coin shows ... **" + coinSides[randomNum].toUpperCase() + "**! You win, congratuilations!");
+            msg.reply("The coin shows ... **" + coinSides[randomNum].toUpperCase() + "**! You win, congratulations!");
             //winnings += betAmount*2;
         }else{
             msg.reply("The coin shows ... **" + coinSides[randomNum].toUpperCase() + "**... You lose :/");
